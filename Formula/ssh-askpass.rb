@@ -3,8 +3,8 @@ require 'formula'
 # Homebrew formula to install ssh password asker
 class SshAskpass < Formula
   homepage 'https://github.com/tmaher/ssh-askpass/'
-  url 'https://codeload.github.com/tmaher/ssh-askpass/tar.gz/v1.1.0'
-  sha256 'fc140cfb914c44cae449b96e2082ac13adbc02c3cd5a7fd837bc009a2bbc9c27'
+  url 'https://codeload.github.com/tmaher/ssh-askpass/tar.gz/v1.1.1'
+  sha256 'd1e2b4a48eff2ea55226159f06c31a900145acf7d4cfded673d3fdbe37677a48'
 
   DISPLAY_TEXT='https://github.com/openssh/openssh-portable/blob/94141b7/readpass.c#L144-L156'.freeze
 
