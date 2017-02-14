@@ -12,6 +12,10 @@ class SshAskpass < Formula
     bin.install 'ssh-askpass'
   end
 
+  def post_install
+    Kernel.system 'brew services restart ssh-askpass'
+  end
+
   def plist; <<-EOS.undent
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -24,6 +28,7 @@ class SshAskpass < Formula
       <string>/bin/sh</string>
       <string>-c</string>
       <string>
+        /bin/launchctl stop com.openssh.ssh-agent
         /bin/launchctl setenv SSH_ASKPASS '#{opt_bin}/ssh-askpass'
         /bin/launchctl setenv DISPLAY \"${DISPLAY:-#{DISPLAY_TEXT}}\"
         /usr/bin/ssh-add -cA
@@ -36,13 +41,5 @@ class SshAskpass < Formula
   </dict>
 </plist>
     EOS
-  end
-
-  def caveats; <<-EOF.undent
-    To take effect, you can either logout or run the following...
-
-      launchctl unload com.openssh.ssh-agent
-      brew services restart #{plist_name}
-    EOF
   end
 end
