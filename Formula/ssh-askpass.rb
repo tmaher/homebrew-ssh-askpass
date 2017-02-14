@@ -61,7 +61,7 @@ without having to logout/login again...
 TO DISABLE PROMPTING PERMANENTLY AND MAKE THIS CRAZY THING GO AWAY
 
   brew services stop #{name}
-  brew uninstall ssh-askpass
+  brew uninstall #{name}
   ssh-add -A
     EOS
   end
