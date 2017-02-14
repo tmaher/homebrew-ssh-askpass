@@ -30,6 +30,7 @@ class SshAskpass < Formula
       <string>
         /bin/launchctl setenv SSH_ASKPASS '#{opt_bin}/ssh-askpass'
         /bin/launchctl setenv DISPLAY \"${DISPLAY:-#{DISPLAY_TEXT}}\"
+        /usr/bin/ssh-add -l
         /bin/launchctl stop com.openssh.ssh-agent
         /usr/bin/ssh-add -cA
       </string>
