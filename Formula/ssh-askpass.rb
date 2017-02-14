@@ -12,11 +12,6 @@ class SshAskpass < Formula
     bin.install 'ssh-askpass'
   end
 
-  def ssh_add_cmd
-    ":" unless Formula['go-ssh-add'] && Formula['go-ssh-add'].opt_bin
-    File.join(Formula['go-ssh-add'].opt_bin, "go-ssh-add")
-  end
-
   def plist; <<-EOS.undent
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -31,7 +26,7 @@ class SshAskpass < Formula
       <string>
         /bin/launchctl setenv SSH_ASKPASS '#{opt_bin}/ssh-askpass'
         /bin/launchctl setenv DISPLAY \"${DISPLAY:-#{DISPLAY_TEXT}}\"
-        '#{ssh_add_cmd}' add-all 2>/dev/null
+        /usr/bin/ssh-add -cA
       </string>
     </array>
     <key>RunAtLoad</key>
@@ -44,12 +39,10 @@ class SshAskpass < Formula
   end
 
   def caveats; <<-EOF.undent
-    For now, you need to load your keys by hand (actual path to key may vary):
+    To take effect, you can either logout or run the following...
 
-      ssh-add -c $HOME/.ssh/id_rsa
-
-    The LaunchAgent is because we need to hook ssh-agent's environment. Ignore
-    the instruction to `launchctl load`; you have to log out/back in.
+      launchctl unload com.openssh.ssh-agent
+      brew services restart #{plist_name}
     EOF
   end
 end
