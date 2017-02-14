@@ -13,7 +13,9 @@ class SshAskpass < Formula
   end
 
   def post_install
-    Kernel.system 'brew services start ssh-askpass'
+    Kernel.system 'brew services start ssh-askpass ||
+      brew services restart ssh-askpass ||
+      true'
   end
 
   def plist; <<-EOS.undent
@@ -48,9 +50,8 @@ class SshAskpass < Formula
   def caveats; <<-EOS.undent
 TO REVERT THIS
 
+  brew services stop #{plist_name}
   brew uninstall ssh-askpass
-  launchctl remove #{plist_name}
-  rm -f ~/Library/LaunchAgents/#{plist_name}.plist
 
 ...and then restart
     EOS
