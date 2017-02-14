@@ -28,9 +28,9 @@ class SshAskpass < Formula
       <string>/bin/sh</string>
       <string>-c</string>
       <string>
-        /bin/launchctl stop com.openssh.ssh-agent
         /bin/launchctl setenv SSH_ASKPASS '#{opt_bin}/ssh-askpass'
         /bin/launchctl setenv DISPLAY \"${DISPLAY:-#{DISPLAY_TEXT}}\"
+        /bin/launchctl stop com.openssh.ssh-agent
         /usr/bin/ssh-add -cA
       </string>
     </array>
