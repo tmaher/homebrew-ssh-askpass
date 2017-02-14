@@ -15,3 +15,20 @@ on macOS. This formula fixes that.
 2. `brew update`
 3. `brew tap tmaher/ssh-askpass`
 4. `brew install ssh-askpass`
+
+## About Sierra & auto-loading
+Prior to Sierra (10.12), macOS would attempt to auto-load private keys into
+`ssh-agent`. That functionality was removed in Sierra, and now users are
+on the hook for loading keys themselves. Usually the advice is something
+like adding `ssh-add -K` to `~/.bashrc`, or more sophisticated things like
+[adding a custom LaunchAgent](https://github.com/jirsbek/SSH-keys-in-macOS-Sierra-keychain).
+
+This Homebrew formula follows the LaunchAgent approach. In order for
+confirmation-on-use to work, when a private key is loaded into agent, a
+flag must be set indicating confirmation-on-use is required. After setting
+the necessary environment variables and restarting `ssh-agent`, the command
+`ssh-add -cA` is run. This auto-loads the keys (as was done prior to Sierra),
+and marks them as requiring confirmation-on-use.
+
+See https://developer.apple.com/library/content/technotes/tn2449/_index.html
+for some additional details on Apple's OpenSSH changes in Sierra.
