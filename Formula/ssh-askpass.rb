@@ -13,9 +13,9 @@ class SshAskpass < Formula
   end
 
   def post_install
-    Kernel.system 'brew services start ssh-askpass ||
-      brew services restart ssh-askpass ||
-      true'
+    Kernel.system "brew services start #{name} ||
+      brew services restart #{name} ||
+      true"
   end
 
   def plist; <<-EOS.undent
@@ -47,13 +47,22 @@ class SshAskpass < Formula
     EOS
   end
 
-  def caveats; <<-EOS.undent
-TO REVERT THIS
+  def caveats; <<-EOS
+TO DISABLE PROMPTING UNTIL YOUR NEXT LOGOUT/LOGIN
 
-  brew services stop #{plist_name}
+  ssh-add -A
+
+...will reload all your keys and tell ssh-agent they don't require approval on
+each use. To make ssh-agent resume its paranoid prompt-on-use behavior
+without having to logout/login again...
+
+  ssh-add -cA
+
+TO DISABLE PROMPTING PERMANENTLY AND MAKE THIS CRAZY THING GO AWAY
+
+  brew services stop #{name}
   brew uninstall ssh-askpass
-
-...and then restart
+  ssh-add -A
     EOS
   end
 end
